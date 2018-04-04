@@ -1,1 +1,1 @@
-include ':app', ':googlecharts'
+include ':app', ':library'
