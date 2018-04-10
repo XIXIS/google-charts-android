@@ -5,8 +5,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.xixis.googlecharts.BarChart;
+import com.xixis.googlecharts.ColumnChart;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -17,7 +23,12 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        ColumnChart columnChart = findViewById(R.id.columnchart);
         BarChart barChart = findViewById(R.id.barchart);
+        ProgressBar progressColumnChart = findViewById(R.id.progressbar_columnchart);
+        ProgressBar progressBarChart = findViewById(R.id.progressbar_barchart);
+        barChart.attachProgressBar(progressBarChart);
+        columnChart.attachProgressBar(progressColumnChart);
 
     }
 

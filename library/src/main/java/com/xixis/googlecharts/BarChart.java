@@ -3,74 +3,104 @@ package com.xixis.googlecharts;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.os.Build;
 import android.support.v13.view.inputmethod.EditorInfoCompat;
 import android.util.AttributeSet;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputConnection;
-import android.webkit.WebChromeClient;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.ProgressBar;
+import android.widget.Toast;
 
 public class BarChart extends WebView {
 
-    private static final String ASSETS_EDITOR_HTML = "file:///android_asset/editor.html";
-
-    private boolean isReady;
     private boolean isIncognitoModeEnabled;
     private String content;
+    private String chartTitle = "Chart Title";
+    private String chartSubtitle = "Chart Subtitle";
+
+
     public BarChart(Context context) {
         super(context);
     }
 
     public BarChart(Context context, AttributeSet attrs) {
         super(context, attrs);
-        init();
+        TypedArray nAttrs = context.getTheme().obtainStyledAttributes(
+                attrs, R.styleable.BarChart,
+                0, 0);
+
+        try {
+            chartTitle = nAttrs.getString(R.styleable.BarChart_chartTitle);
+            chartSubtitle = nAttrs.getString(R.styleable.BarChart_chartSubtitle);
+        } finally {
+            nAttrs.recycle();
+        }
+
     }
 
     public BarChart(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        init();
+        TypedArray nAttrs = context.getTheme().obtainStyledAttributes(
+                attrs, R.styleable.BarChart,
+                0, 0);
+
+        try {
+            chartTitle = nAttrs.getString(R.styleable.BarChart_chartTitle);
+            chartSubtitle = nAttrs.getString(R.styleable.BarChart_chartSubtitle);
+        } finally {
+            nAttrs.recycle();
+        }
+    }
+
+    public void attachProgressBar(ProgressBar progressBar) {
+        init(progressBar);
     }
 
     @SuppressLint("SetJavaScriptEnabled")
-    private void init() {
+    private void init(ProgressBar progressBar) {
 
-        String content = "<html>"
-                + "<head>"
-                + "<script type='text/javascript' src='https://www.google.com/jsapi'></script>"
-                + "<script type='text/javascript'>"
-                + "google.load('visualization', '1', {packages:['corechart']});"
-                + "google.setOnLoadCallback(drawChart);"
-                + "function drawChart() {"
-                + "var data = google.visualization.arrayToDataTable(["
-                + "['Year', 'Sales', 'Expenses'],"
-                + "['2010', 1000, 400],"
-                + "['2011', 1170, 460],"
-                + "['2012', 660, 1120],"
-                + "['2013', 1030, 540]"
-                + "]);"
-                + "var options = {"
-                + "title: 'Truiton Performance',"
-                + "hAxis: {title: 'Year', titleTextStyle: {color: 'red'}}"
-                + "};"
-                + "var chart = new google.visualization.ColumnChart(document.getElementById('chart_div'));"
-                + "chart.draw(data, options);"
-                + "}"
-                + "</script>"
-                + "</head>"
-                + "<body>"
-                + "<div id='chart_div' style='width: 100%; height: 100%;'></div>"
-                + "</body>"
-                + "</html>";
+        String content = "<html>" +
+                "<head>" +
+                "<script type='text/javascript' src='https://www.gstatic.com/charts/loader.js'></script>" +
+                "<script type='text/javascript'>" +
+                "google.charts.load('current', {'packages':['bar']});" +
+                "google.charts.setOnLoadCallback(drawChart);" +
+                "function drawChart () {" +
+                "var data = google.visualization.arrayToDataTable([" +
+                "['Year', 'Sales', 'Expenses']," +
+                "['2014', 1000, 400]," +
+                "['2015', 1170, 460]," +
+                "['2016', 660, 1120]," +
+                "['2017', 1030, 540]]);" +
+                "var options = {" +
+                "chart:{" +
+                "title: '"+ chartTitle +"'," +
+                "subtitle:'"+ chartSubtitle +"'," +
+                "}," +
+                "bars: 'horizontal' " +
+                "};" +
+                "var chart = new google.charts.Bar(document.getElementById('barchart_material'));" +
+                "chart.draw(data, google.charts.Bar.convertOptions(options));" +
+                "}" +
+                "</script >" +
+                "</head>" +
+                "<body>" +
+                "<div id='barchart_material' style='width: 100%; height: 100%;'></div >"+
+                "</body>"+
+                "</html>";
+
+
         WebSettings settings = getSettings();
         settings.setJavaScriptEnabled(true);
         requestFocusFromTouch();
-//        setWebViewClient(new BarChartClient());
-//        loadUrl(ASSETS_EDITOR_HTML);
+
+        setWebViewClient(new BarChartClient(progressBar));
         loadDataWithBaseURL("file:///android_asset/", content, "text/html", "utf-8", null);
 
     }
@@ -97,9 +127,15 @@ public class BarChart extends WebView {
 
     private class BarChartClient extends WebViewClient {
 
+        ProgressBar progressBar;
+
+        public BarChartClient(ProgressBar progressBar) {
+            this.progressBar = progressBar;
+        }
+
         @Override
         public void onPageFinished(WebView view, String url) {
-            isReady = url.equalsIgnoreCase(ASSETS_EDITOR_HTML);
+            progressBar.setVisibility(INVISIBLE);
             super.onPageFinished(view, url);
         }
 
@@ -115,5 +151,21 @@ public class BarChart extends WebView {
             view.loadUrl(request.getUrl().toString());
             return true;
         }
+    }
+
+    public void setTitle(String chartTitle) {
+        this.chartTitle = chartTitle;
+    }
+
+    public String getTitle() {
+        return chartTitle;
+    }
+
+    public void setChartSubtitle(String chartSubtitle) {
+        this.chartSubtitle = chartSubtitle;
+    }
+
+    public String getChartSubtitle() {
+        return chartSubtitle;
     }
 }

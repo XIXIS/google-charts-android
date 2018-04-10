@@ -1,0 +1,10 @@
+<resources>
+    <declare-styleable name="BarChart">
+        <attr name="chartTitle" format="string" />
+        <attr name="chartSubtitle" format="string" />
+        <!--<attr name="labelPosition" format="enum">-->
+            <!--<enum name="left" value="0"/>-->
+            <!--<enum name="right" value="1"/>-->
+        <!--</attr>-->
+    </declare-styleable>
+</resources>

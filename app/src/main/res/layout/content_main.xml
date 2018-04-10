@@ -8,24 +8,82 @@
     tools:context=".MainActivity"
     tools:showIn="@layout/activity_main">
 
-    <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/barchart_card"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_margin="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        card_view:cardCornerRadius="2dp"
-        card_view:cardElevation="4dp">
+        android:layout_height="match_parent">
 
-        <com.xixis.googlecharts.BarChart
-            android:id="@+id/barchart"
+        <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="wrap_content"
+            android:paddingBottom="10dp">
 
-    </android.support.v7.widget.CardView>
+            <ProgressBar
+                android:id="@+id/progressbar_columnchart"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:elevation="10dp"
+                app:layout_constraintBottom_toBottomOf="@id/columnchart_card"
+                app:layout_constraintLeft_toLeftOf="@id/columnchart_card"
+                app:layout_constraintRight_toRightOf="@id/columnchart_card"
+                app:layout_constraintTop_toTopOf="@id/columnchart_card" />
+
+            <ProgressBar
+                android:id="@+id/progressbar_barchart"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:elevation="10dp"
+                app:layout_constraintBottom_toBottomOf="@id/barchart_card"
+                app:layout_constraintLeft_toLeftOf="@id/barchart_card"
+                app:layout_constraintRight_toRightOf="@id/barchart_card"
+                app:layout_constraintTop_toTopOf="@id/barchart_card" />
+
+            <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/columnchart_card"
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                android:layout_margin="8dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                card_view:cardCornerRadius="2dp"
+                card_view:cardElevation="4dp">
+
+                <com.xixis.googlecharts.ColumnChart
+                    android:id="@+id/columnchart"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+            </android.support.v7.widget.CardView>
+
+            <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/barchart_card"
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                android:layout_marginBottom="20dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginTop="8dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                card_view:cardCornerRadius="2dp"
+                card_view:cardElevation="4dp"
+                android:padding="10dp"
+                card_view:layout_constraintTop_toBottomOf="@id/columnchart_card"
+                card_view:layout_constraintBottom_toBottomOf="parent">
+
+                <com.xixis.googlecharts.BarChart
+                    android:id="@+id/barchart"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:chartTitle="Main Chart Title"
+                    app:chartSubtitle="Main Chart Subtitle" />
+
+            </android.support.v7.widget.CardView>
+
+        </android.support.constraint.ConstraintLayout>
+
+    </ScrollView>
 
 </android.support.constraint.ConstraintLayout>
+
 
