@@ -6,13 +6,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 
 import com.xixis.googlecharts.BarChart;
-import com.xixis.googlecharts.ColumnChart;
-
-import java.util.HashMap;
-import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -21,14 +16,49 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar.setTitle("Bar Charts");
         setSupportActionBar(toolbar);
 
-        ColumnChart columnChart = findViewById(R.id.columnchart);
+        BarChart barChart1 = findViewById(R.id.barchart1);
         BarChart barChart = findViewById(R.id.barchart);
         ProgressBar progressColumnChart = findViewById(R.id.progressbar_columnchart);
         ProgressBar progressBarChart = findViewById(R.id.progressbar_barchart);
-        barChart.attachProgressBar(progressBarChart);
-        columnChart.attachProgressBar(progressColumnChart);
+
+        String[][] chartData1 = {
+                new String[] { "Copper", "8.94", "#b87333" },
+                new String[] { "Silver", "10.49", "silver" },
+                new String[] { "Gold", "19.30", "gold" },
+                new String[] { "Platinum", "21.45", "color: #e5e4e2" }
+        };
+        String[][] chartData = {
+                new String[] { "2014", "1000", "400" },
+                new String[] { "2015", "1170", "460" },
+                new String[] { "2016", "660", "1120" },
+                new String[] { "2017", "1030", "540" }
+        };
+
+        String[] chartHeader1 = new String[] { "Element", "Density", "{ role: 'style' }" };
+        String[] chartHeader = new String[] { "Year", "Sales", "Expenses" } ;
+
+        String chartDataString1 = "['Element', 'Density', { role: 'style' } ]," +
+                "['Copper', 8.94, '#b87333']," +
+                "['Silver', 10.49, 'silver']," +
+                "['Gold', 19.30, 'gold']," +
+                "['Platinum', 21.45, 'color: #e5e4e2']";
+        String chartDataString = "['Year', 'Sales', 'Expenses']," +
+                "['2014', 1000, 400]," +
+                "['2015', 1170, 460]," +
+                "['2016', 660, 1120]," +
+                "['2017', 1030, 540]";
+
+        barChart.attachProgressBar(progressBarChart)
+//                .setChartHeaders(chartHeader)
+                .setChartData(chartDataString)
+                .loadChart();
+        barChart1.attachProgressBar(progressColumnChart)
+//                .setChartHeaders(chartHeader1)
+                .setChartData(chartDataString1)
+                .loadChart();
 
     }
 

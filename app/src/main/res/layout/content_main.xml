@@ -48,10 +48,13 @@
                 card_view:cardCornerRadius="2dp"
                 card_view:cardElevation="4dp">
 
-                <com.xixis.googlecharts.ColumnChart
-                    android:id="@+id/columnchart"
+                <com.xixis.googlecharts.BarChart
+                    android:id="@+id/barchart1"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
+                    android:layout_height="match_parent"
+                    app:chartTitle="Classic Chart Title"
+                    app:chartSubtitle="Classic Chart Subtitle"
+                    app:chartType="Classic"/>
 
             </android.support.v7.widget.CardView>
 
@@ -75,8 +78,9 @@
                     android:id="@+id/barchart"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    app:chartTitle="Main Chart Title"
-                    app:chartSubtitle="Main Chart Subtitle" />
+                    app:chartTitle="Material Chart Title"
+                    app:chartSubtitle="Material Chart Subtitle"
+                    app:chartType="Material"/>
 
             </android.support.v7.widget.CardView>
 
