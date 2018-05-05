@@ -7,6 +7,7 @@ import android.content.res.TypedArray;
 import android.os.Build;
 import android.support.v13.view.inputmethod.EditorInfoCompat;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputConnection;
@@ -83,28 +84,47 @@ public class BarChart extends WebView {
         return this;
     }
 
+    //Pass string data to chart
     public BarChart setChartData(String chartDataString) {
-        this.chartDataString = chartDataString;
+        this.chartDataString += chartDataString;
         return this;
     }
 
+    //Pass string array data to chart
     public BarChart setChartData(String[][] chartData){
+        StringBuilder builder = new StringBuilder();
+        for (String[] arr : chartData) {
+            builder.append("[");
+            for (int i=0;i<arr.length;i++) {
+                if (arr[i].startsWith("{")) builder.append(arr[i]).append(",");
+                else if (isNumeric(arr[i]) && i!=0) builder.append(arr[i]).append(",");
+                else builder.append("'").append(arr[i]).append("',");
+            }
+            builder.append("],");
+        }
+        this.chartDataString += (builder.toString());
         return this;
     }
 
-    public BarChart setChartHeaders(String[] chartDataHeader){
-        StringBuilder builder =  new StringBuilder();
+    //Pass string array header to chart
+    public BarChart setChartAxisHeaders(String[] chartDataHeader) {
+        StringBuilder builder = new StringBuilder();
         builder.append("[");
         for(String s: chartDataHeader) {
             if(s.startsWith("{")) builder.append(s).append(",");
             else builder.append("'").append(s).append("',");
         }
-        this.chartDataString+=(builder.toString()+"]");
+        this.chartDataString+=(builder.toString()+"],");
         return this;
     }
 
-    public BarChart setChartHeaders(String chartDataHeader){
-        this.chartDataString+=(chartDataHeader);
+    //Pass string header to chart
+    public BarChart setChartAxisHeaders(String chartDataHeader) {
+        if(chartDataHeader.substring(chartDataHeader.length()-1).equals(","))
+            this.chartDataString+=(chartDataHeader);
+        else
+            this.chartDataString+=(chartDataHeader+",");
+
         return this;
     }
 
@@ -120,11 +140,9 @@ public class BarChart extends WebView {
             case CLASSIC_CHART:
 
                 content += (oHtmlOHeadChartScriptAPIUriOScript + classicChartPackageAndCallback +
-                        functionToVisualisation + chartDataString +
-                        "]);" +
+                        functionToVisualisation + chartDataString + "]);" +
                         "var view = new google.visualization.DataView(data);" +
-                        "view.setColumns([0, 1, {calc:'stringify', sourceColumn:1," +
-                        "type:'string',  role: 'annotation' }, 2]);" +
+                        "view.setColumns([0, 1, {calc:'stringify', sourceColumn:1, type:'string', role:'annotation'}, 2]);" +
                         "var options = { title:'"+ chartTitle +"'," +
                         "bar:{ groupWidth: '95%' }," +
                         "legend: { position: 'none' },  };" +
@@ -152,6 +170,8 @@ public class BarChart extends WebView {
         WebSettings settings = getSettings();
         settings.setJavaScriptEnabled(true);
         requestFocusFromTouch();
+
+//        Log.d("content array", content);
 
         setWebViewClient(new BarChartClient());
         loadDataWithBaseURL("file:///android_asset/", content, "text/html", "utf-8", null);
@@ -217,5 +237,18 @@ public class BarChart extends WebView {
 
     public String getChartSubtitle() {
         return chartSubtitle;
+    }
+
+    public static boolean isNumeric(String str)
+    {
+        try
+        {
+            double d = Double.parseDouble(str);
+        }
+        catch(NumberFormatException nfe)
+        {
+            return false;
+        }
+        return true;
     }
 }
