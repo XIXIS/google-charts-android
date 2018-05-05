@@ -5,7 +5,7 @@ A google charts library for android
 - Declare chart in xml
 - Pass Chart **Title, Subtitle, Type (Classic or Material)** as attributes  
 
-##Screenshots
+## Screenshots
 ![Image](https://github.com/XIXIS/google-charts-android/blob/master/screenshots/device-2018-05-05-095742.png)
 
 # Set Up
